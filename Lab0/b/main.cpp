@@ -14,20 +14,21 @@ class Handler {
 private:
 	ifstream in;
 	int count = 0;
+	vector <pair <int, string>> vector_with_sorted_statistic;
 
 	map <string, int> get_map() {
 		map <string, int> words;
 		string str;
-		while (in.good()) { 
+		while (in.good()) {
 			getline(in, str, '\n');
 
-			regex reg("[^A-Za-zАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя0-9]+"); 
+			regex reg("[^A-Za-z0-9]+");
 
 			sregex_token_iterator word(str.begin(), str.end(), reg, -1);
 
 			sregex_token_iterator end;
 
-			while (word != end) {
+			while (word != end && *word != "") {
 				string test = *word;
 				words[*word]++;
 				word++;
@@ -49,6 +50,11 @@ private:
 		return sorted_word;
 	}
 
+	void sort_statistic() {
+		vector_with_sorted_statistic = get_vector_statistic();
+		sort(vector_with_sorted_statistic.begin(), vector_with_sorted_statistic.end(), greater<>());
+	}
+
 public:
 	Handler(const char* file_name) {
 		in.open(file_name);
@@ -56,43 +62,39 @@ public:
 			cout << "No";
 			exit(EXIT_FAILURE);
 		}
+		sort_statistic();
 	}
 
-	vector <pair <int, string>> get_sorted_statistic() {
-		vector <pair <int, string>> sorted_word = get_vector_statistic();
-
-		sort(sorted_word.begin(), sorted_word.end(), greater<>()); 
-
-		return sorted_word;
+	const vector <pair <int, string>>& get_sorted_statistic() const {
+		return vector_with_sorted_statistic;
 	}
 
-	int getter() {
+	const int& get_count() const {
 		return count;
 	};
 };
 
 class print_words {
+private:
 	ofstream out;
+
 public:
 	print_words(const char* file_name) {
 		out.open(file_name);
 	}
 
-	void Printer(vector <pair <int, string>> statistic, int count) {
-		vector <pair <int, string>> ::iterator iter3 = statistic.begin(), iter4 = statistic.end();
+	void Printer(const Handler& handler) {
+		vector <pair <int, string>> ::const_iterator iter3 = handler.get_sorted_statistic().begin(), iter4 = handler.get_sorted_statistic().end();
 		while (iter3 != iter4) {
-			out << iter3->second << "," << iter3->first << "," << (iter3->first / static_cast<double>(count)) * 100 << "%" << endl;
+			out << iter3->second << "," << iter3->first << "," << (iter3->first / static_cast<double>(handler.get_count())) * 100 << "%" << endl;
 			iter3++;
 		}
 	}
 };
 
 int main() {
-	//SetConsoleOutputCP(65001);
 	Handler handler("input.txt");
-	vector <pair <int, string>> sorted_word = handler.get_sorted_statistic();
-	int counter = handler.getter();
 	print_words printer("output.csv");
-	printer.Printer(sorted_word, counter);
+	printer.Printer(handler);
 	return 0;
 }
