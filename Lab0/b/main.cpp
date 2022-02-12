@@ -74,16 +74,16 @@ public:
 	};
 };
 
-class print_words {
+class Printer {
 private:
 	ofstream out;
 
 public:
-	print_words(const char* file_name) {
+	Printer(const char* file_name) {
 		out.open(file_name);
 	}
 
-	void Printer(const Handler& handler) {
+	void print_words(const Handler& handler) {
 		vector <pair <int, string>> ::const_iterator iter3 = handler.get_sorted_statistic().begin(), iter4 = handler.get_sorted_statistic().end();
 		while (iter3 != iter4) {
 			out << iter3->second << "," << iter3->first << "," << (iter3->first / static_cast<double>(handler.get_count())) * 100 << "%" << endl;
@@ -94,7 +94,7 @@ public:
 
 int main() {
 	Handler handler("input.txt");
-	print_words printer("output.csv");
-	printer.Printer(handler);
+	Printer printer("output.csv");
+	printer.print_words(handler);
 	return 0;
 }
