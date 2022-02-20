@@ -1,0 +1,2 @@
+1 -> 3 -> 10 -> 3 -> 2
+10 = replace word2 word2

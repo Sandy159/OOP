@@ -1,0 +1,8 @@
+desc
+1 = readfile in_file.txt
+2 = writefile out_file.txt
+3 = sort
+10 = replace word1 word2
+3 = grep 10
+csed
+1 -> 2 -> 3 -> 10 -> 10 -> 3 -> 2
