@@ -32,6 +32,6 @@ void Workflow::execute() {
 
 void Workflow::free_workflow() {
 	for (auto i : map_of_workers) {
-		delete(i.second); //удаляем, т.к. память на куче выделили
+		delete(i.second); 
 	}
 }
