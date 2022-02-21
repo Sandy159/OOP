@@ -23,8 +23,8 @@ void Config_handler::put_workers(Workflow* workflow) {
         sregex_token_iterator iter(str.begin(), str.end(), re, -1);
         sregex_token_iterator end;
         index = stoi(*iter);
-        iter++; //пропустили индекс
-        iter++; //пропустили =
+        iter++; 
+        iter++; 
         while (iter != end) {
             list_of_arguments.push_back(*iter);
             iter++;
@@ -107,7 +107,7 @@ Config_handler::Config_handler(string file_name) {
 }
 
 Workflow& Config_handler::read_file() {
-    Workflow* workflow = new Workflow{}; //иначе создастся на стеке, а так к нему будет доступ
+    Workflow* workflow = new Workflow{}; 
     put_workers(workflow);
     put_order_operations(workflow);
     return *workflow;
